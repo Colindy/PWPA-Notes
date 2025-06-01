@@ -17,3 +17,6 @@ Once that's done we run the following command and you get the output that you se
 `curl -X GET --proxy localhost:8080 "http://localhost/labs/api/account.php?token=eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0=.eyJ1c2VyIjoiamVyZW15Iiwicm9sZSI6InN0YWZmIn0=."`
 
 Here you see Authz Status as "Bypassed!" and the Unauth Status as "Bypassed!" as well.  This means you have a vulnerable API.  You may also see "Enforced" meaning the API is not vulnerable to this type of attack.  If you see "Is enforced??", that will require further investigation.
+
+![ScreenShot16.png](Images/ScreenShot16.png)
+
