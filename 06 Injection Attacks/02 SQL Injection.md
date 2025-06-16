@@ -1,4 +1,4 @@
-### SQL Injection
+## SQL Injection
 
 You can test by using different characters that are used in SQL statements (i.e. ' or ") and seeing if it returns any errors.  We should also spend some time using the application to see what it's functionality is supposed to be.
 
@@ -8,7 +8,7 @@ We can also check with logical operators (and, or) to see if we can get anything
 
 ![ScreenShot7.png](Images/ScreenShot7.png)
 
-#### Basic SQL Injection
+### Basic SQL Injection
 
 Using UNION statements to get information from other tables.  When you use `UNION SELECT` statements, you have to use the same number of columns as the original request.  Meaning, if the original statement asks for username and password, you can only get 2 columns from another table, not 1 or 3+, only 2.
 
@@ -67,7 +67,7 @@ Ahh, if we add `' and 1=1#` we don't get the login page, we stay on the dashboar
 
 
 
-#### Blind SQL Injection
+### Blind SQL Injection
 
 
 
@@ -77,7 +77,7 @@ Ahh, if we add `' and 1=1#` we don't get the login page, we stay on the dashboar
 
 
 
-#### SQLmap
+### SQLmap
 
 
 
