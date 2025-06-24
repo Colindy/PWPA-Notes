@@ -63,23 +63,41 @@ Here, all we did was add an `a` at the end of the cookie and now we're presented
 
 ![ScreenShot16.png](Images/ScreenShot16.png)
 
-Ahh, if we add `' and 1=1#` we don't get the login page, we stay on the dashboard.  This is a good indicator that we can inject some SQL into this cookie.
-
-
+Ahh, if we add `' and 1=1#` we don't get the login page, we stay on the dashboard.  This is a good indicator that we can inject some SQL into this cookie.  This is actually Blind SQL Injection.
 
 ### Blind SQL Injection
 
+Blind SQL Injection means that you aren't getting any data back, you're just changing the behavior of the application (ex. It will display the login page or the Dashboard page in this instance).  With this, you build a query that will iterate through and return yes or no depending on what is asked.  You ask questions like "Does this account's password start with an 'a'? With a 'b'?" and so on and you can build out the password using the responses.
 
+We do this with the MySQL SUBSTR() Function - w3schools.com has a good page on it.
 
+`SUBSTR(string, start, length) = 'z'#`
 
+`string` - This is the string you are matching against.  This is where you would put your sql syntax to grab the field you want to test against.  
+`start` - This is the position you start at in your `string`.  
+`length` - This is how many chars you go from the starting point.  
 
+As an example, if we have the following...
 
+`' and substr('alex', 1, 3) = 'ale'#`
 
+Here, we're checking against the string `alex` and we start from the position of `1` and go out `3` characters.  It's worth noting that this is not like programing where your first position is `0` instead of `1`.  This statement would return `TRUE` and thus we would get the dashboard page in the previous example.
 
+![ScreenShot20.png](Images/ScreenShot20.png)
+
+If we wanted to, we can change the `string` portion (here, `'alex'`) to `(select password from injection0x02 where username = 'jessamy')` and change a couple of the other items like length and the = part like so...
+
+`' and substr((select password from injection0x02 where username = 'jessamy'), 1, 1) = 'z'#`
+
+We would run through the alphabet where the last `z` is at the end and go until we got the dashboard instead of the login.
+
+![ScreenShot21.png](Images/ScreenShot21.png)
+
+So now we know the first character of jessamy's password is `z`.
+
+This would be very tedious though.  In order to do this faster, we're going to use SQLmap.  Will pick this up at the bottom of the SQLmap section.  You can use burpsuite intruder as well, just change the place number in the syntax and have intruder go through the options in the `= 'z'#` where "z" will be the insert point.
 
 ### SQLmap
-
-
 
 `sqlmap -r sqlmap.txt`
 
@@ -97,16 +115,47 @@ Here, we have under the red underlines, saying that it does not appear that the 
 
 In this screenshot, we see that the `password` field is not likely injectable but we also see that all tested parameters do not appear to be injectable.  At this point we can look elsewhere or try some manual testing.
 
+(cont from `Blind SQL Injection` section)  
 
+Continuing right where we left off.  Here we want to test the cookie value.  In SQLmap, that requires level 2.  So here's our syntax.
 
+`sqlmap -r req2.txt --level=2`
 
+Running that will show us that this is an injectable parameter.
 
+![ScreenShot22.png](Images/ScreenShot22.png)
 
+As you can see here, it shows that this an injection point.
 
+`sqlmap -r req2.txt --level=2 --dump`  
 
+This command will dump database information for all found tables.  If we want a specific table we can use the following...
 
+`sqlmap -r req2.txt --level=2 -T <tablename>`
 
-#### Setting up a sql database to play with
+The `-T` will give just the table name you put in.
+
+![ScreenShot23.png](Images/ScreenShot23.png)
+
+As we can see with our specific results, we have both passwords now.  We can modify this to show whatever table output we can get to.
+
+### Second Order SQL Injection
+
+The idea here is that you may not be able to directly get sql injection going but you may be able to store some sql code into the database and see if that allows you to execute your injection attack.
+
+For example, a log in page and account creation page.  If we test and we are unable to get sql injection from the inputs, perhaps we can get some sql stored somewhere (like say, in a username) and get it to run later in the process.
+
+Create a user named `test` and then log in with that user and we get this...
+
+![ScreenShot24.png](Images/ScreenShot24.png)
+
+If we use that same form to create a user named `' or 1=1#`
+
+![ScreenShot25.png](Images/ScreenShot25.png)
+
+We see that we get everyone's bio now.
+
+### Setting up a sql database to play with
 
 Starting mysql service - `sudo systemctl start mysql`  
 Login to mysql - `sudo mysql`  
