@@ -4,7 +4,7 @@ Very serious finding.  In programing, using functions like eval() and system() c
 
 What `eval()` does is it runs the code inside of it.  As a quick example, we have this.  The first `eval()` statement equaling 2.  And then setting a variable (`userInput`) equal to `7*7` and then you run that bit of code inside `eval(userInput)` and you get the output of 49, since 7 times 7 is 49.
 
-![ScreenShot1.png](Images2/ScreenShot1.png)
+![ScreenShot1.png](Images2/Screenshot1.png)
 
 You can also check this via terminal and use it to test different things.
 
@@ -18,7 +18,7 @@ kali
 php >
 ```
 
-![ScreenShot2.png](Images2/ScreenShot2.png)
+![ScreenShot2.png](Images2/Screenshot2.png)
 
 Here we're doing the same thing but in PHP with an interactive shell (`php -a`).
 
@@ -30,29 +30,29 @@ You're not likely to run into something like this coming lab on a public facing 
 
 This appears to be a "Network Check" application.  It gives you an address bar and even a handy example in the input box to help you understand what is being asked.  So we try it and get the following.
 
-![ScreenShot3.png](Images2/ScreenShot3.png)
+![ScreenShot3.png](Images2/Screenshot3.png)
 
 Here we see the example in the text box, we see the command that is ran from the input we put in.  And we have the result of said command.
 
 If we put something in like `http://localhost/ ; whoami` or `http://localhost/ ; whoami ;` we don't get anything back.  But, if we try `http://localhost/ ; whoami; #` and use the # sign to essentially end the statement...
 
-![ScreenShot4.png](Images2/ScreenShot4.png)
+![ScreenShot4.png](Images2/Screenshot4.png)
 
 Here we see at the end that we do have the command `whoami` run there at the end.  I can even change it a bit more and clean up what I'm looking at by finishing out the meant to be `grep` command and THEN put my injected command.
 
 `http://localhost | grep "HTTP/" ; whoami ; #`
 
-![ScreenShot5.png](Images2/ScreenShot5.png)
+![ScreenShot5.png](Images2/Screenshot5.png)
 
 You can also put in just `; whoami ; #` and get just the `www-data` back.
 
-![ScreenShot6.png](Images2/ScreenShot6.png)
+![ScreenShot6.png](Images2/Screenshot6.png)
 
 Now that we know that, we can do some code execution and get a reverse shell.
 
 We can use the commands like `which php` and `which python` to see what is installed on the box, and use that on PayloadsAllTheThings to find a payload to get reverse shell.  Don't forget to start your listener `nc -nlvp 4444`
 
-![ScreenShot7.png](Images2/ScreenShot7.png)
+![ScreenShot7.png](Images2/Screenshot7.png)
 
 ### Blind Command Injection
 
@@ -62,8 +62,8 @@ For this one, we can test with something simple to put in, like ```http://localh
 
 You can then take a website and add ``` /?q=`whoami` ``` and you should get in the response with the command "whoami" attached to the end.
 
-![ScreenShot8.png](Images2/ScreenShot8.png)
+![ScreenShot8.png](Images2/Screenshot8.png)
 
-![ScreenShot9.png](Images2/ScreenShot9.png)
+![ScreenShot9.png](Images2/Screenshot9.png)
 
 Here we have the same website.hook site.  In the web app we input the `whoami` portion with the tacs and we get back the user `www-data` in our response.  Again, be sure to use the `/?q=` at the end and put your command in tacs (``` ` ```).
